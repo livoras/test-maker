@@ -24,6 +24,13 @@ let Maker = React.createClass({
     this.state.activeResultIndex = results.length - 1
     this.setState(this.state)
   },
+  onDeleteResult: function() {
+    let results = this.state.results
+    let index = this.state.activeResultIndex
+    results.splice(index, 1)
+    if (!results[index]) index--
+    this.setState({results, activeResultIndex: index})
+  },
   selectResult: function(i) {
     this.setState({
       activeResultIndex: i
@@ -189,7 +196,9 @@ let Maker = React.createClass({
         </ul>
       </div>
 
-      <ResultMaker result={this.state.results[this.state.activeResultIndex]}/>
+      <ResultMaker 
+        onDeleteResult={this.onDeleteResult.bind(this)}
+        result={this.state.results[this.state.activeResultIndex]}/>
 
       <hr/>
 

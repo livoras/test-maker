@@ -14,6 +14,10 @@ let ResultMaker = React.createClass({
     this.setState({[attr]: val})
     this.props.result[attr] = val
   },
+  deleteResult: function() {
+    if (!confirm("删除该测试结果页面？")) return
+    this.props.onDeleteResult()
+  },
   render: function() {
     if (!this.props.result) return (<div/>);
     return (
@@ -49,6 +53,7 @@ let ResultMaker = React.createClass({
                     onChange={this.setAttr.bind(this, "addOn")}/>
         </div>
 
+        <a className="tmt-btn tmt-btn_m tmt-btn_negative" onClick={this.deleteResult.bind(this)}>删除</a>
       </div>
     )
   }
