@@ -1,0 +1,14 @@
+extends layout
+
+block head
+  script(src="/lib/react-with-addons.js")
+  script(src="/lib/jquery-1.11.1.min.js")
+  link(rel='stylesheet', href='/bin/styles/test488.css')
+
+block content
+  div#page
+
+block scripts
+  script.
+    var tests = !{JSON.stringify(tests)};
+  script(src="/bin/scripts/test488.js")

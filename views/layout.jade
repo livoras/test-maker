@@ -1,7 +1,13 @@
 doctype html
 html
   head
+    meta(name="viewport", content=" initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
+    meta(name="apple-mobile-web-app-capable", content="no")
+    meta(name="format-detection", content="telephone=no")
     title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/lib/pure-min.css')
+    link(rel='stylesheet', href='/lib/weixin-style.css')
+    block head
   body
     block content
+    block scripts
