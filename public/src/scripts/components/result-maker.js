@@ -53,7 +53,7 @@ let ResultMaker = React.createClass({
                     onChange={this.setAttr.bind(this, "addOn")}/>
         </div>
 
-        <a className="tmt-btn tmt-btn_m tmt-btn_negative" onClick={this.deleteResult.bind(this)}>删除</a>
+        <a className="tmt-btn tmt-btn_m tmt-btn_negative" onClick={this.deleteResult}>删除</a>
       </div>
     )
   }

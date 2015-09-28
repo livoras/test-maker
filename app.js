@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var models = require("./models");
+var busboy = require("connect-busboy")
 
 var routes = require('./routes/index');
 var test488 = require('./routes/test488');
@@ -20,6 +21,7 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(busboy({immediate: true}))
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 

@@ -1,6 +1,7 @@
 import {clone} from "../common/util"
 import config from "../common/config"
 import ResultMaker from "./result-maker"
+import UploadImage from "./upload-image"
 
 let Maker = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
@@ -99,6 +100,9 @@ let Maker = React.createClass({
       }
     })
   },
+  onUploadedImage: function(coverUrl) {
+    this.setState({coverUrl})
+  },
   render: function() {
     if (!this.state) {
       return (
@@ -126,10 +130,9 @@ let Maker = React.createClass({
         <div className="field">
           <span className="name">封面</span>
           <span>{this.state.coverUrl}</span><br/>
-          <form>
-          <input className="tmt-input" type="file"/>
-          <button>上传</button>
-          </form>
+          <UploadImage 
+            onUploaded={this.onUploadedImage}
+            oldFileName={this.state.coverUrl}/>
         </div>
 
         <div className="field">
@@ -183,27 +186,27 @@ let Maker = React.createClass({
       <h3>测试结果</h3>
       <div className="results-nav">
         <ul>
-          <li className="btn" onClick={this.addResult.bind(this)}>新增</li>
+          <li className="btn" onClick={this.addResult}>新增</li>
           {this.state.results.map((result, i) => {
             let className = "result-nav-item"
             if (i === this.state.activeResultIndex) {
               className += " active"
             }
             return (
-              <li onClick={this.selectResult.bind(this, i)} className={className}>结果{i + 1}</li>
+              <li onClick={this.selectResult.bind(this, i)} className={className} key={i}>结果{i + 1}</li>
             )
           })}
         </ul>
       </div>
 
       <ResultMaker 
-        onDeleteResult={this.onDeleteResult.bind(this)}
+        onDeleteResult={this.onDeleteResult}
         result={this.state.results[this.state.activeResultIndex]}/>
 
       <hr/>
 
-      <a className="tmt-btn tmt-btn_m tmt-btn_positive" onClick={this.saveTest.bind(this)}>保存</a>
-      <a className="tmt-btn tmt-btn_m tmt-btn_negative" onClick={this.deleteTest.bind(this)}>删除</a>
+      <a className="tmt-btn tmt-btn_m tmt-btn_positive" onClick={this.saveTest}>保存</a>
+      <a className="tmt-btn tmt-btn_m tmt-btn_negative" onClick={this.deleteTest}>删除</a>
 
       </div>
     )
