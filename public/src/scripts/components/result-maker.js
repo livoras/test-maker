@@ -1,3 +1,5 @@
+import UploadImage from "./upload-image"
+
 let ResultMaker = React.createClass({
   getInitialState: function() {
     return this.getState(this.props)
@@ -18,6 +20,10 @@ let ResultMaker = React.createClass({
     if (!confirm("删除该测试结果页面？")) return
     this.props.onDeleteResult()
   },
+  onUploadedImage: function(coverUrl) {
+    this.setState({coverUrl})
+    this.props.result.coverUrl = coverUrl
+  },
   render: function() {
     if (!this.props.result) return (<div/>);
     return (
@@ -26,10 +32,9 @@ let ResultMaker = React.createClass({
         <div className="field">
           <span className="name">封面</span>
           <span>{this.state.coverUrl}</span><br/>
-          <form>
-            <input className="tmt-input" type="file"/>
-            <button>上传</button>
-          </form>
+          <UploadImage 
+            onUploaded={this.onUploadedImage}
+            oldFileName={this.state.coverUrl}/>
         </div>
 
         <div className="field">

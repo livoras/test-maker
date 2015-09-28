@@ -114,7 +114,8 @@ let Maker = React.createClass({
     return (
       <div className="maker">
 
-      <h2>测试配置</h2>
+      <h2>测试配置: </h2>
+      <a href={"/test488/" + this.state._id} target="_blank">{this.state.title}</a>
       <div className="home-config">
         <h3>首页页面配置</h3>
         <div className="field">

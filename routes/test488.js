@@ -7,13 +7,22 @@ import path from "path"
 
 let router = express.Router()
 
-/* GET users listing. */
 router.get('/', function(req, res, next) {
   Test488.find({}).sort({createdAt: -1}).exec(function(error, tests) {
     if (error) return res.status(500).send("Server Error")
     res.render('test488', {
       tests,
       title: '测试生成器488'
+    })
+  })
+})
+
+router.get('/:id', function(req, res, next) {
+  Test488.findOne({_id: req.params.id}, function(error, test) {
+    if (error) return res.status(404).send("Not Found.")
+    res.render('test488-index', {
+      imagePath: "/upload/images/",
+      test,
     })
   })
 })
@@ -63,6 +72,7 @@ router.put("/:id", function(req, res) {
 })
 
 router.delete("/:id", function(req, res) {
+  // TODO: Delete relevant images.
   Test488.remove({_id: req.params.id}, function(err, data) {
     if (err) return res.status(404).json({result: "fail", msg: err})
     res.json({"result": "success", "msg": "OK", test: data})
