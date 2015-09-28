@@ -1,0 +1,27 @@
+extends layout
+
+block head
+  link(rel='stylesheet', href='/bin/styles/test488-index.css')
+
+block content
+  div#page
+    div.cover(style="background-image: url(#{imagePath}/#{test.coverUrl})")
+    script.
+      var cover = document.querySelector("div.cover")
+      cover.style.height = document.body.clientWidth * 0.7 + "px"
+    h3.title= test.title
+    p.description= test.description
+    div.form
+      input.tmt-input(type="text", placeholder="#{test.inputPlaceHolder}")
+      div.btn-box
+        <a href="#" class="tmt-btn tmt-btn_m tmt-btn_positive">#{test.startText}</a>
+      div.btn-box
+        <a href="#" class="tmt-btn tmt-btn_m tmt-btn_negative">#{test.shareText}</a>
+
+  div#addOn.
+    !{test.addOn}
+
+block scripts
+  script.
+    var data = !{JSON.stringify(test)}
+    console.log(data)

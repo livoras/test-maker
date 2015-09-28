@@ -21,6 +21,7 @@ router.get('/:id', function(req, res, next) {
   Test488.findOne({_id: req.params.id}, function(error, test) {
     if (error) return res.status(404).send("Not Found.")
     res.render('test488-index', {
+      title: test.title,
       imagePath: "/upload/images/",
       test,
     })
@@ -50,15 +51,20 @@ router.post('/images', function(req, res, next) {
     }
   })
   // 新增文件
+  let newFileName = ""
+  let ext = ""
   req.busboy.on("file", function(fieldName, file, fileName) {
-    let newFileName = uuid.v4()
-    let ext = path.extname(fileName)
+    newFileName = uuid.v4()
+    ext = path.extname(fileName)
     let newFilePath = `${config.IMAGES_UPLOAD}/${newFileName}${ext}`
     let stream = fs.createWriteStream(newFilePath)
-    stream.on("close", function() {
-      res.json({result: "success", name: `${newFileName}${ext}`})
+    file.on("data", function(data) {
+      console.log(data, '...')
     })
     file.pipe(stream)
+  })
+  req.busboy.on("finish", function() {
+    res.json({result: "success", name: `${newFileName}${ext}`})
   })
   req.pipe(req.busboy);
 })

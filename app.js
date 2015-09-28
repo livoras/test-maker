@@ -21,7 +21,7 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(busboy({immediate: true}))
+app.use(busboy(/*{immediate: true}*/)) // 这里会导致图片只有一部分
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 

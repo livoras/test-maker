@@ -12,6 +12,7 @@ class UploadImage extends React.Component {
       // ajax upload: http://stackoverflow.com/questions/21044798/how-to-use-formdata-for-ajax-file-upload
       formData.append("oldFileName", this.props.oldFileName)
       $.ajax({
+        async: false,
         type: "POST",
         url: '/test488/images',
         data: formData,
