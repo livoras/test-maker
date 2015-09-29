@@ -8,7 +8,7 @@ import escape from "escape-html"
 
 let router = express.Router()
 
-router.get('/', function(req, res, next) {
+router.get('/admin', function(req, res, next) {
   Test488.find({}).sort({createdAt: -1}).exec(function(error, tests) {
     if (error) return res.status(500).send("Server Error")
     res.render('test488', {
@@ -38,11 +38,11 @@ router.get('/:id/results/:value', function(req, res, next) {
       ? nbHash(value.slice(0, 3), test.results.length)
       : req.query.rank % test.results.length
     let result = test.results[index]
-    let normalDesc = test.resultDescription.replace(/xxx/, escape(value))
-    normalDesc = normalDesc.replace(/yyy/, result.result)
+    let normalDesc = test.resultDescription.replace(/xxx/g, escape(value))
+    normalDesc = normalDesc.replace(/yyy/g, result.result)
 
-    let resultDescription = test.resultDescription.replace(/xxx/, `<span class="value">${escape(value)} </span>`)
-    test.resultDescription = resultDescription.replace(/yyy/, `<span class="result">${result.result}</span>`)
+    let resultDescription = test.resultDescription.replace(/xxx/g, `<span class="value">${escape(value)} </span>`)
+    test.resultDescription = resultDescription.replace(/yyy/g, `<span class="result">${result.result}</span>`)
 
     res.render('test488-result', {
       title: normalDesc,

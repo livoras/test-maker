@@ -5,7 +5,7 @@ block head
 
 block content
   div#page
-    div.cover(style="background-image: url(#{imagePath}/#{result.coverUrl})")
+    div.cover(style="background-image: url(#{imagePath}#{result.coverUrl})")
     include responsive
     h4.description !{test.resultDescription}
     p.more !{result.resultMoreWording}
@@ -25,3 +25,8 @@ block scripts
       event.preventDefault()
       window.location.href = "/test488/#{test._id}"
     })
+    var imgUrl = window.location.origin + "#{imagePath}#{result.coverUrl})";
+    var lineLink = window.location.href;
+    var shareTitle = "#{title}";
+    var descContent = "#{result.resultMoreWording}";
+  include wx

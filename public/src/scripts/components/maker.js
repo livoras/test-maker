@@ -177,8 +177,6 @@ let Maker = React.createClass({
           <textarea className="tmt-input" valueLink={this.linkState("addOn")}/>
         </div>
 
-        <a className="tmt-btn tmt-btn_m tmt-btn_positive" onClick={this.preview.bind(this, "/test488/" + this.state._id + "?")}>预览首页</a>
-
       </div>
 
       <div className="result-config">

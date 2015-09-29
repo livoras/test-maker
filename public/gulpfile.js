@@ -34,6 +34,8 @@ var dist = {
   html: "dist"
 }
 
+dist = bin
+
 function logError(err) {
   console.log(err)
 }
