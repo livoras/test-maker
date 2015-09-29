@@ -198,7 +198,7 @@ let Maker = React.createClass({
 
         <div className="field">
           <span className="name">测试结果页插入内容</span>
-          <input className="tmt-input" valueLink={this.linkState("resultAddOn")}/>
+          <textarea className="tmt-input" valueLink={this.linkState("resultAddOn")}/>
         </div>
 
       </div>
