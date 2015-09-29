@@ -1,0 +1,12 @@
+div.share
+  img.share-logo(src="/assets/images/share.png", alt="分享")
+  div.back 返回
+script.
+  var share = document.querySelector("a.share");
+  var back = document.querySelector("div.back");
+  share.addEventListener("click", function() {
+    document.querySelector("div.share").style.display = "block";
+  });
+  back.addEventListener("click", function() {
+    document.querySelector("div.share").style.display = "none";
+  })

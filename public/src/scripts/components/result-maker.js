@@ -1,4 +1,5 @@
 import UploadImage from "./upload-image"
+import eventbus from "../common/eventbus"
 
 let ResultMaker = React.createClass({
   getInitialState: function() {
@@ -23,6 +24,9 @@ let ResultMaker = React.createClass({
   onUploadedImage: function(coverUrl) {
     this.setState({coverUrl})
     this.props.result.coverUrl = coverUrl
+  },
+  previewResult: function() {
+    this.props.previewResult()
   },
   render: function() {
     if (!this.props.result) return (<div/>);
@@ -59,6 +63,7 @@ let ResultMaker = React.createClass({
         </div>
 
         <a className="tmt-btn tmt-btn_m tmt-btn_negative" onClick={this.deleteResult}>删除</a>
+        <a className="tmt-btn tmt-btn_m tmt-btn_positive" onClick={this.previewResult}>预览该结果页</a>
       </div>
     )
   }

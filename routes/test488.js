@@ -4,6 +4,7 @@ import config from "../config"
 import fs from "fs"
 import uuid from "uuid"
 import path from "path"
+import escape from "escape-html"
 
 let router = express.Router()
 
@@ -27,6 +28,48 @@ router.get('/:id', function(req, res, next) {
     })
   })
 })
+
+router.get('/:id/results/:value', function(req, res, next) {
+  Test488.findOne({_id: req.params.id}, function(error, test) {
+    if (error) return res.status(404).send("Not Found.")
+    if (test.results.length === 0) return res.redirect(`/test488/${test._id}`)
+    let value = req.params.value
+    let index = (req.query.rank === void 666)
+      ? nbHash(value.slice(0, 3), test.results.length)
+      : req.query.rank % test.results.length
+    let result = test.results[index]
+    let normalDesc = test.resultDescription.replace(/xxx/, escape(value))
+    normalDesc = normalDesc.replace(/yyy/, result.result)
+
+    let resultDescription = test.resultDescription.replace(/xxx/, `<span class="value">${escape(value)} </span>`)
+    test.resultDescription = resultDescription.replace(/yyy/, `<span class="result">${result.result}</span>`)
+
+    res.render('test488-result', {
+      title: normalDesc,
+      imagePath: "/upload/images/",
+      normalDesc,
+      result,
+      test,
+    })
+  })
+})
+
+function nbHash(val, constrain) {
+  let numStr = ""
+  let forEach = [].forEach;
+
+  forEach.call(val, function(char, i) {
+    numStr += val.charCodeAt(i)
+  })
+
+  let num = 0
+
+  forEach.call(numStr, function(bit) {
+    num += (+bit)
+  })
+
+  return num  % constrain
+}
 
 router.post('/', function(req, res, next) {
   let data = JSON.parse(req.body.test)

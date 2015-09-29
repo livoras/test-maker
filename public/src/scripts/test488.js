@@ -1,4 +1,5 @@
 import Maker from "./components/maker"
+import Preview from "./components/preview"
 import SideBar from "./components/side-bar"
 import {clone} from "./common/util"
 import config from "./common/config"
@@ -35,14 +36,17 @@ class Page extends React.Component {
   render() {
     let activeTest = this.state.tests[this.state.activeTestIndex] 
     return (
-      <div className="wrapper">
-        <SideBar tests={this.state.tests} 
-                 activateTest={this.activateTest.bind(this)}
-                 activeTest={activeTest}
-                 onNewTest={this.onNewTest.bind(this)}/>
-        <Maker activeTest={activeTest}
-               onUpdated={this.onTestUpdated.bind(this)}
-               onDeleted={this.onTestDeleted.bind(this)}/>
+      <div>
+        <div className="wrapper">
+          <SideBar tests={this.state.tests} 
+                   activateTest={this.activateTest.bind(this)}
+                   activeTest={activeTest}
+                   onNewTest={this.onNewTest.bind(this)}/>
+          <Maker activeTest={activeTest}
+                 onUpdated={this.onTestUpdated.bind(this)}
+                 onDeleted={this.onTestDeleted.bind(this)}/>
+        </div>
+        <Preview/>
       </div>
     )
   }

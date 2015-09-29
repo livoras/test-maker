@@ -1,0 +1,27 @@
+extends layout
+
+block head
+  link(rel='stylesheet', href='/bin/styles/test488-index.css')
+
+block content
+  div#page
+    div.cover(style="background-image: url(#{imagePath}/#{result.coverUrl})")
+    include responsive
+    h4.description !{test.resultDescription}
+    p.more !{result.resultMoreWording}
+    div.form
+      div.btn-box
+        <a class="start tmt-btn tmt-btn_m tmt-btn_positive">#{test.resultStartText}</a>
+      div.btn-box
+        <a class="share tmt-btn tmt-btn_m tmt-btn_negative">#{test.resultShareText}</a>
+  include share
+
+  div#addOn.
+    !{test.addOn}
+
+block scripts
+  script.
+    document.querySelector("a.start").addEventListener("click", function(event) {
+      event.preventDefault()
+      window.location.href = "/test488/#{test._id}"
+    })

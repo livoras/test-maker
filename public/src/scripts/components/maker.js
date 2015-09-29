@@ -2,6 +2,7 @@ import {clone} from "../common/util"
 import config from "../common/config"
 import ResultMaker from "./result-maker"
 import UploadImage from "./upload-image"
+import eventbus from "../common/eventbus"
 
 let Maker = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
@@ -44,7 +45,7 @@ let Maker = React.createClass({
       this.createTest()
     }
   },
-  updateTest: function() {
+  updateTest: function(cb) {
     $.ajax({
       url: `/test488/${this.state._id}`,
       type: "PUT",
@@ -53,8 +54,9 @@ let Maker = React.createClass({
       },
       success: (data) => {
         if (data.result === "success") {
-          alert("更新成功")
+          this.alertSave()
           this.props.onUpdated(this.state)
+          cb && cb()
         }
       },
       error: function(err) {
@@ -71,7 +73,7 @@ let Maker = React.createClass({
       },
       success: (data) => {
         if (data.result === "success") {
-          alert("保存成功")
+          this.alertSave()
           this.setState({_id: data.test._id})
           this.props.onUpdated(this.state)
         }
@@ -80,6 +82,13 @@ let Maker = React.createClass({
         alert("保存失败！" + err.msg)
       }
     })
+  },
+  alertSave: function() {
+    let btn = React.findDOMNode(this.refs.saveBtn)
+    btn.innerText = "OK"
+    setTimeout(function() {
+      btn.innerText = "保存"
+    }, 1000)
   },
   deleteTest: function() {
     if (!confirm("确认删除？")) return;
@@ -103,6 +112,12 @@ let Maker = React.createClass({
   onUploadedImage: function(coverUrl) {
     this.setState({coverUrl})
   },
+  preview: function(url) {
+    eventbus.emit("preview", url)
+  },
+  previewResult: function() {
+    eventbus.emit("preview", `/test488/${this.state._id}/results/膜蛤/?rank=${this.state.activeResultIndex}`)
+  },
   render: function() {
     if (!this.state) {
       return (
@@ -114,13 +129,14 @@ let Maker = React.createClass({
     return (
       <div className="maker">
 
-      <h2>测试配置: </h2>
-      <a href={"/test488/" + this.state._id} target="_blank">{this.state.title}</a>
+      <h2>
+        测试配置: <a className="tmt-fc_link" href={"/test488/" + this.state._id} target="_blank">{this.state.title}</a>
+      </h2>
       <div className="home-config">
         <h3>首页页面配置</h3>
         <div className="field">
           <span className="name">id</span>
-          <span>{this.state._id}</span>
+          <span className="name">{this.state._id}</span>
         </div>
 
         <div className="field">
@@ -161,14 +177,15 @@ let Maker = React.createClass({
           <textarea className="tmt-input" valueLink={this.linkState("addOn")}/>
         </div>
 
+        <a className="tmt-btn tmt-btn_m tmt-btn_positive" onClick={this.preview.bind(this, "/test488/" + this.state._id + "?")}>预览首页</a>
+
       </div>
 
       <div className="result-config">
         <h3>测试页面配置</h3>
-
         <div className="field">
-          <span className="name">测试结果页插入内容</span>
-          <textarea className="tmt-input" valueLink={this.linkState("resultAddOn")}/>
+          <span className="name">测试结果话术</span>
+          <textarea className="tmt-input" valueLink={this.linkState("resultDescription")}/>
         </div>
 
         <div className="field">
@@ -180,34 +197,43 @@ let Maker = React.createClass({
           <span className="name">分享按钮</span>
           <input className="tmt-input" valueLink={this.linkState("resultShareText")}/>
         </div>
+
+        <div className="field">
+          <span className="name">测试结果页插入内容</span>
+          <input className="tmt-input" valueLink={this.linkState("resultAddOn")}/>
+        </div>
+
       </div>
 
-      <hr/>
+      <div className="results-page">
+        <h3>测试结果</h3>
+        <div className="results-nav">
+          <ul>
+            <li className="btn" onClick={this.addResult}>新增</li>
+            {this.state.results.map((result, i) => {
+              let className = "result-nav-item"
+              if (i === this.state.activeResultIndex) {
+                className += " active"
+              }
+              return (
+                <li onClick={this.selectResult.bind(this, i)} className={className} key={i}>结果{i + 1}</li>
+              )
+            })}
+          </ul>
+        </div>
 
-      <h3>测试结果</h3>
-      <div className="results-nav">
-        <ul>
-          <li className="btn" onClick={this.addResult}>新增</li>
-          {this.state.results.map((result, i) => {
-            let className = "result-nav-item"
-            if (i === this.state.activeResultIndex) {
-              className += " active"
-            }
-            return (
-              <li onClick={this.selectResult.bind(this, i)} className={className} key={i}>结果{i + 1}</li>
-            )
-          })}
-        </ul>
+        <ResultMaker 
+          onDeleteResult={this.onDeleteResult}
+          previewResult={this.previewResult.bind(this)}
+          result={this.state.results[this.state.activeResultIndex]}/>
       </div>
 
-      <ResultMaker 
-        onDeleteResult={this.onDeleteResult}
-        result={this.state.results[this.state.activeResultIndex]}/>
 
-      <hr/>
-
-      <a className="tmt-btn tmt-btn_m tmt-btn_positive" onClick={this.saveTest}>保存</a>
-      <a className="tmt-btn tmt-btn_m tmt-btn_negative" onClick={this.deleteTest}>删除</a>
+      <div className="btns">
+        <a className="tmt-btn tmt-btn_m tmt-btn_positive" onClick={this.saveTest} ref="saveBtn">保存</a>
+        <a className="tmt-btn tmt-btn_m tmt-btn_positive" onClick={this.preview.bind(this, "/test488/" + this.state._id + "?")}>预览首页</a>
+        <a className="tmt-btn tmt-btn_m tmt-btn_negative" onClick={this.deleteTest}>删除</a>
+      </div>
 
       </div>
     )
