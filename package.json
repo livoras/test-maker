@@ -16,6 +16,7 @@
     "mongoose": "^4.1.8",
     "morgan": "~1.5.1",
     "serve-favicon": "~2.2.0",
-    "uuid": "^2.0.1"
+    "uuid": "^2.0.1",
+    "wesign": "0.0.4"
   }
 }

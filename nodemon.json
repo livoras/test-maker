@@ -1,5 +1,5 @@
 {
   "verbose": true,
   "ignore": ["*.test.js", "fixtures/*"],
-  "exec": "./bin/www"
+  "exec": "PORT=3000 babel-node ./bin/www"
 }

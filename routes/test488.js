@@ -5,6 +5,8 @@ import fs from "fs"
 import uuid from "uuid"
 import path from "path"
 import escape from "escape-html"
+import wesign from "wesign"
+import crypto from "crypto"
 
 let router = express.Router()
 
@@ -19,20 +21,24 @@ router.get('/admin', function(req, res, next) {
 })
 
 router.get('/:id', function(req, res, next) {
+  let url = `http://${req.headers.host}${req.originalUrl}`
   Test488.findOne({_id: req.params.id}, function(error, test) {
     if (error) return res.status(404).send("Not Found.")
+    let signature = wesign.signature(url)
     res.render('test488-index', {
       title: test.title,
       imagePath: "/upload/images/",
-      test,
+      test, signature, config
     })
   })
 })
 
 router.get('/:id/results/:value', function(req, res, next) {
+  let url = `http://${req.headers.host}${req.originalUrl}`
   Test488.findOne({_id: req.params.id}, function(error, test) {
     if (error) return res.status(404).send("Not Found.")
     if (test.results.length === 0) return res.redirect(`/test488/${test._id}`)
+    let signature = wesign.signature(url)
     let value = req.params.value
     let index = (req.query.rank === void 666)
       ? nbHash(value.slice(0, 3), test.results.length)
@@ -47,25 +53,21 @@ router.get('/:id/results/:value', function(req, res, next) {
     res.render('test488-result', {
       title: normalDesc,
       imagePath: "/upload/images/",
-      normalDesc,
-      result,
-      test,
+      normalDesc, result, test, signature, config
     })
   })
 })
 
 function nbHash(val, constrain) {
-  let numStr = ""
+  let shasum = crypto.createHash("sha1")
+  shasum.update(val)
+
+  let str = shasum.digest("hex")
   let forEach = [].forEach;
 
-  forEach.call(val, function(char, i) {
-    numStr += val.charCodeAt(i)
-  })
-
   let num = 0
-
-  forEach.call(numStr, function(bit) {
-    num += (+bit)
+  forEach.call(str, function(bit, i) {
+    num += str.charCodeAt(i)
   })
 
   return num  % constrain

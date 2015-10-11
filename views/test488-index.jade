@@ -2,6 +2,7 @@ extends layout
 
 block head
   link(rel='stylesheet', href='/bin/styles/test488-index.css')
+  script(src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js")
 
 block content
   div#page
@@ -28,8 +29,11 @@ block scripts
       if (val.length <= 0) return alert("请输入你的资料")
       window.location.href = "/test488/#{test._id}/results/" + val
     });
-    var imgUrl = window.location.origin + "#{imagePath}#{test.coverUrl})";
+    var imgUrl = window.location.origin + "#{imagePath}#{test.coverUrl}";
     var lineLink = window.location.href;
     var shareTitle = "#{title}";
     var descContent = "#{test.description}";
+    var signature = !{JSON.stringify(signature)};
+    var config = !{JSON.stringify(config)};
   include wx
+  include share-wx

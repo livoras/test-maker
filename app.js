@@ -12,6 +12,14 @@ var test488 = require('./routes/test488');
 
 var app = express();
 
+import config from "./config"
+import wesign from "wesign"
+
+wesign.init({
+  appid: config.APPID,
+  appsecret: config.APPSECRET
+})
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
